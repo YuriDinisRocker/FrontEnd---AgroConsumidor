@@ -52,7 +52,7 @@ function Carrinho() {
             <main className="p-6">
                 {itens.length === 0 ? (
                     <p className="text-center text-gray-500 mt-10">
-                        Nenhum item no carrinho 😢
+                        Nenhum item no carrinho ❌
                     </p>
                 ) : (
                     <div className="max-w-3xl mx-auto bg-white rounded-2xl shadow-lg p-6">
