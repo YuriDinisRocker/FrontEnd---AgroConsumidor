@@ -8,6 +8,7 @@ import Produtos from "./pages/Produto";
 import Estoque from "./pages/Estoque";
 import CreatePost from "./pages/CreatePost";
 import Notificacoes from "./pages/Notificacao";
+import Carrinho from "./pages/Carrinho";
 
 function App() {
   return (
@@ -20,6 +21,7 @@ function App() {
       <Route path="/estoque" element={<Estoque />} />
       <Route path="/post" element={<CreatePost />} />
       <Route path="/notificacao" element={<Notificacoes />} />
+      <Route path="/carrinho" element={<Carrinho />} />
     </Routes>
   );
 }

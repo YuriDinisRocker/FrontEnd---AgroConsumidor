@@ -44,7 +44,7 @@ function LandingPage() {
         </div>
       </main>
 
-      {/* Rodapé */}
+      
       <footer className="bg-gradient-to-t from-[#1D361F] to-[#254B2A] text-center text-gray-100 py-4 rounded-t-2xl">
         <p className="text-sm">
             AgroConsumidor

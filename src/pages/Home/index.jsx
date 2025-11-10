@@ -9,16 +9,18 @@ function Home() {
   const [loading, setLoading] = useState(true);
   const [usuario, setUsuario] = useState(null);
   const navigate = useNavigate();
+  const [qtdCarrinho, setQtdCarrinho] = useState(0);
+  const [itensCarrinho, setItensCarrinho] = useState([]);
 
   const token = localStorage.getItem("token");
 
-  
+
   const handleLogout = () => {
     localStorage.removeItem("token");
     navigate("/login");
   };
 
-  
+
   useEffect(() => {
     if (!token) {
       navigate("/login");
@@ -29,12 +31,12 @@ function Home() {
       const decoded = jwtDecode(token);
       const id =
         decoded[
-          "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier"
+        "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier"
         ] || decoded.id || decoded.Id || decoded.idConsumidor;
 
       const role =
         decoded[
-          "http://schemas.microsoft.com/ws/2008/06/identity/claims/role"
+        "http://schemas.microsoft.com/ws/2008/06/identity/claims/role"
         ] || decoded.role;
 
       setUsuario({ id, role });
@@ -44,7 +46,7 @@ function Home() {
     }
   }, [token]);
 
-  
+
   useEffect(() => {
     if (!usuario || usuario.role !== "Consumidor") {
       setLoading(false);
@@ -80,7 +82,7 @@ function Home() {
     fetchPosts();
   }, [usuario]);
 
-  
+
   const handleQuantidade = (produtoId, value) => {
     setQuantidades((prev) => ({
       ...prev,
@@ -88,9 +90,10 @@ function Home() {
     }));
   };
 
-  
+
   const comprar = async (idVendedor, idProduto, vendedorNome, telefone, nomeProduto) => {
     const quantidade = quantidades[idProduto] || 1;
+
 
     if (!usuario?.id) {
       alert("Erro: ID do consumidor não encontrado no token.");
@@ -120,11 +123,29 @@ function Home() {
     }
   };
 
+  useEffect(() => {
+    console.log(itensCarrinho)
+  }, [itensCarrinho])
+
+  const adicionarAoCarrinho = function adicionarCarrinho(n) {
+    setQtdCarrinho(prev => prev + 1);
+    //Inserindo itens dentro do objeto para o carrinho
+    setItensCarrinho(prev => [
+      ...prev,
+      {
+        ...n
+      },
+    ]);
+
+  }
+
   if (loading) {
     return <p className="text-center mt-10 text-gray-600">Carregando...</p>;
   }
 
-  
+
+
+
   if (usuario?.role === "Vendedor") {
     return (
       <div className="min-h-screen bg-gray-50">
@@ -173,7 +194,7 @@ function Home() {
     );
   }
 
-  
+
   return (
     <div className="min-h-screen bg-gray-50">
       <header className="bg-gradient-to-b from-[#1D361F] to-[#254B2A] flex justify-end items-center h-20 px-10 shadow-lg rounded-b-2xl">
@@ -244,12 +265,41 @@ function Home() {
                   }
                   className="w-full bg-green-600 text-white py-2 rounded-xl hover:bg-green-700 transition"
                 >
-                  Comprar
+                  💲 Comprar
+                </button>
+                <button
+                  onClick={() =>
+                    adicionarAoCarrinho({
+                      post,
+                      quantidade: quantidades[post.produto.id] || 1
+                    })
+
+                  }
+                  className="mt-2 w-full bg-green-500 text-white py-2 rounded-xl hover:bg-green-700 transition"
+                >
+                  ➕ Adicionar ao carrinho
                 </button>
               </div>
             ))}
           </div>
+
         )}
+        <div className="mt-5 flex justify-center items-center">
+          <div className="bg-gradient-to-t from-[#1D361F] to-[#254B2A] text-center  text-gray-100 py-4 rounded-2xl w-50 group hover:from-[#4C8A56] to-[#38703F]">
+            <button
+              onClick={() => {
+                localStorage.setItem("carrinho", JSON.stringify(itensCarrinho));
+                navigate("/carrinho");
+              }}
+            >
+              🛒 Carrinho
+              <span className="text-red-500 text-lg font-bold group-hover:text-xl">
+                {qtdCarrinho === 0 ? null : qtdCarrinho}
+              </span>
+            </button>
+          </div>
+        </div>
+
       </main>
     </div>
   );
