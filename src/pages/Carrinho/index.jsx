@@ -34,7 +34,7 @@ function Carrinho() {
     const token = localStorage.getItem("token");
 
     if (!token) {
-        return (<h1>Você não possui autorização</h1>)
+        return (navigate("/login"))
     }
 
     return (
